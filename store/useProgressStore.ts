@@ -58,16 +58,12 @@ export const useProgressStore = create<ProgressState>()(
         setItem: (name, value) => {
           try {
             localStorage.setItem(name, JSON.stringify(value));
-          } catch {
-            // quota exceeded or unavailable — silently skip
-          }
+          } catch {}
         },
         removeItem: (name) => {
           try {
             localStorage.removeItem(name);
-          } catch {
-            // unavailable — silently skip
-          }
+          } catch {}
         },
       },
     }

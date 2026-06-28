@@ -74,14 +74,12 @@ function TopicItem({
 export function Sidebar({ activeSlug, onSelect, mobileOpen }: SidebarProps) {
   return (
     <>
-      {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 lg:block" role="tablist" aria-label="Topic navigation">
         <div className="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
           <SidebarContent activeSlug={activeSlug} onSelect={onSelect} />
         </div>
       </aside>
 
-      {/* Mobile drawer */}
       <aside
         className={`sidebar-drawer fixed left-0 top-20 z-40 h-[calc(100vh-5rem)] w-72 border-r border-border bg-background-elevated lg:hidden ${
           mobileOpen ? 'sidebar-drawer-open' : ''

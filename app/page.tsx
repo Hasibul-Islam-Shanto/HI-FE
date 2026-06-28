@@ -32,7 +32,6 @@ export default function Home() {
     <>
       <Navbar onMenuToggle={() => setSidebarOpen((o) => !o)} />
 
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/50 lg:hidden"
