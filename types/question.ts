@@ -1,5 +1,7 @@
 export type Level = 'junior' | 'middle' | 'senior';
 
+export type FilterLevel = Level | 'all';
+
 export interface Question {
   id: string;
   question: string;
@@ -13,4 +15,11 @@ export interface Topic {
   description: string;
   color: string;
   questions: Question[];
+}
+
+export interface TopicSummary {
+  slug: string;
+  title: string;
+  color: string;
+  questionCount: number;
 }

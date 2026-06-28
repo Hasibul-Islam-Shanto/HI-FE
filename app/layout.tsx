@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { getDefaultMetadata } from "@/lib/metadata";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -7,11 +8,7 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-export const metadata: Metadata = {
-  title: "Frontend",
-  description:
-    "176 curated frontend interview questions across HTML, CSS, JavaScript, TypeScript, React, React Native, Vue, Next.js, and Coding — with progress tracking.",
-};
+export const metadata: Metadata = getDefaultMetadata();
 
 export default function RootLayout({
   children,
@@ -22,6 +19,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${spaceGrotesk.variable} dark antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-screen">{children}</body>
     </html>

@@ -1,12 +1,12 @@
 'use client';
 
-import { useId, useState } from 'react';
-import { Search, ChevronDown, Check } from 'lucide-react';
-import { Topic, Level } from '@/types/question';
+import { useId, useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Search } from 'lucide-react';
+import type { FilterLevel, Topic } from '@/types/question';
 import { useProgressStore } from '@/store/useProgressStore';
-import { AnswerContent } from './AnswerContent';
-import { DifficultyBadge } from './DifficultyBadge';
 import { FilterButtons } from './FilterButtons';
+import { QuestionItem } from './QuestionItem';
 import { TopicHeader } from './TopicHeader';
 
 interface ListViewProps {
@@ -14,12 +14,17 @@ interface ListViewProps {
 }
 
 export function ListView({ topic }: ListViewProps) {
+  const searchParams = useSearchParams();
+  const initialQuestionId = searchParams.get('q') ?? undefined;
   const [search, setSearch] = useState('');
-  const [levelFilter, setLevelFilter] = useState<Level | 'all'>('all');
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [levelFilter, setLevelFilter] = useState<FilterLevel>('all');
+  const [expandedId, setExpandedId] = useState<string | null>(
+    initialQuestionId ?? null
+  );
   const searchInputId = useId();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const { markKnown, unmarkKnown, isKnown } = useProgressStore();
+  const markAllKnown = useProgressStore((s) => s.markAllKnown);
 
   const filtered = topic.questions.filter((q) => {
     const matchesSearch = q.question.toLowerCase().includes(search.toLowerCase());
@@ -27,7 +32,40 @@ export function ListView({ topic }: ListViewProps) {
     return matchesSearch && matchesLevel;
   });
 
-  const isCodingTopic = topic.slug === 'coding';
+  const handleMarkAllVisible = () => {
+    markAllKnown(
+      topic.slug,
+      filtered.map((q) => q.id)
+    );
+  };
+
+  const focusSearch = useCallback(() => {
+    searchInputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement;
+      const isTyping =
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable;
+
+      if (event.key === '/' && !isTyping) {
+        event.preventDefault();
+        focusSearch();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [focusSearch]);
+
+  useEffect(() => {
+    if (!initialQuestionId) return;
+    const element = document.getElementById(`question-${initialQuestionId}-button`);
+    element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [initialQuestionId]);
 
   return (
     <div className="mt-6">
@@ -43,6 +81,7 @@ export function ListView({ topic }: ListViewProps) {
             aria-hidden="true"
           />
           <input
+            ref={searchInputRef}
             id={searchInputId}
             type="search"
             value={search}
@@ -51,8 +90,20 @@ export function ListView({ topic }: ListViewProps) {
             autoComplete="off"
             className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-secondary focus:border-aurora-indigo focus:outline-none"
           />
+          <p className="sr-only">Press slash to focus search</p>
         </div>
-        <FilterButtons active={levelFilter} onChange={setLevelFilter} />
+        <div className="flex flex-wrap items-center gap-2">
+          <FilterButtons active={levelFilter} onChange={setLevelFilter} />
+          {filtered.length > 0 && (
+            <button
+              type="button"
+              onClick={handleMarkAllVisible}
+              className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
+            >
+              Mark visible as known
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="mt-4 space-y-2">
@@ -64,84 +115,20 @@ export function ListView({ topic }: ListViewProps) {
             No questions match your search
           </p>
         ) : (
-          filtered.map((q, idx) => {
-            const isExpanded = expandedId === q.id;
-            const known = isKnown(topic.slug, q.id);
-            const number = String(idx + 1).padStart(2, '0');
-            const buttonId = `question-${q.id}-button`;
-            const answerId = `answer-${q.id}`;
-
-            return (
-              <article
-                key={q.id}
-                className="card-premium rounded-lg border border-border bg-surface"
-              >
-                <h3 className="m-0 font-normal">
-                  <button
-                    type="button"
-                    id={buttonId}
-                    onClick={() => setExpandedId(isExpanded ? null : q.id)}
-                    aria-expanded={isExpanded}
-                    aria-controls={answerId}
-                    className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors hover:bg-surface-hover"
-                  >
-                    <span className="flex shrink-0 items-center gap-1.5">
-                      {known && (
-                        <>
-                          <Check className="h-3.5 w-3.5 text-junior" aria-hidden="true" />
-                          <span className="sr-only">Marked as known. </span>
-                        </>
-                      )}
-                      <span className="font-mono text-xs text-text-secondary" aria-hidden="true">
-                        {number}
-                      </span>
-                    </span>
-                    <span
-                      className={`flex-1 text-sm ${known ? 'text-text-secondary' : 'text-text-primary'}`}
-                    >
-                      {q.question}
-                    </span>
-                    <DifficultyBadge level={q.level} />
-                    <ChevronDown
-                      className={`h-4 w-4 shrink-0 text-text-secondary transition-transform ${
-                        isExpanded ? 'rotate-180' : ''
-                      }`}
-                      aria-hidden="true"
-                    />
-                  </button>
-                </h3>
-
-                {isExpanded && (
-                  <div
-                    id={answerId}
-                    role="region"
-                    aria-labelledby={buttonId}
-                    className="border-t border-border px-4 py-4"
-                  >
-                    <AnswerContent answer={q.answer} isCodingTopic={isCodingTopic} />
-
-                    <button
-                      type="button"
-                      aria-pressed={known}
-                      onClick={() =>
-                        known
-                          ? unmarkKnown(topic.slug, q.id)
-                          : markKnown(topic.slug, q.id)
-                      }
-                      className={`mt-4 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                        known
-                          ? 'bg-junior/15 text-junior'
-                          : 'border border-border text-text-secondary hover:text-text-primary'
-                      }`}
-                    >
-                      <Check className="h-4 w-4" aria-hidden="true" />
-                      {known ? 'Known' : 'Mark as known'}
-                    </button>
-                  </div>
-                )}
-              </article>
-            );
-          })
+          filtered.map((question, idx) => (
+            <QuestionItem
+              key={question.id}
+              question={question}
+              topic={topic}
+              index={idx}
+              isExpanded={expandedId === question.id}
+              onToggle={() =>
+                setExpandedId((current) =>
+                  current === question.id ? null : question.id
+                )
+              }
+            />
+          ))
         )}
       </div>
     </div>

@@ -1,61 +1,58 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { RefObject } from 'react';
-import { topics } from '@/data';
-import { useProgressStore } from '@/store/useProgressStore';
+import type { TopicSummary } from '@/types/question';
+import { useKnownCount } from '@/store/useProgressStore';
 
 interface SidebarProps {
-  activeSlug: string;
-  onSelect: (slug: string) => void;
+  summaries: TopicSummary[];
   mobileOpen: boolean;
   mobileDrawerRef?: RefObject<HTMLElement | null>;
+  onNavigate?: () => void;
 }
 
-function SidebarContent({ activeSlug, onSelect }: Omit<SidebarProps, 'mobileOpen' | 'mobileDrawerRef'>) {
+function SidebarContent({
+  summaries,
+  activeSlug,
+  onNavigate,
+}: {
+  summaries: TopicSummary[];
+  activeSlug: string;
+  onNavigate?: () => void;
+}) {
   return (
     <ul className="space-y-1 p-3">
-      {topics.map((topic) => {
-        const isActive = topic.slug === activeSlug;
-        return (
-          <li key={topic.slug}>
-            <TopicItem
-              slug={topic.slug}
-              title={topic.title}
-              color={topic.color}
-              count={topic.questions.length}
-              isActive={isActive}
-              onSelect={onSelect}
-            />
-          </li>
-        );
-      })}
+      {summaries.map((topic) => (
+        <li key={topic.slug}>
+          <TopicItem
+            topic={topic}
+            isActive={topic.slug === activeSlug}
+            onNavigate={onNavigate}
+          />
+        </li>
+      ))}
     </ul>
   );
 }
 
 function TopicItem({
-  slug,
-  title,
-  color,
-  count,
+  topic,
   isActive,
-  onSelect,
+  onNavigate,
 }: {
-  slug: string;
-  title: string;
-  color: string;
-  count: number;
+  topic: TopicSummary;
   isActive: boolean;
-  onSelect: (slug: string) => void;
+  onNavigate?: () => void;
 }) {
-  const knownCount = useProgressStore((s) => (s.known[slug] ?? []).length);
+  const knownCount = useKnownCount(topic.slug);
 
   return (
-    <button
-      type="button"
-      aria-current={isActive ? 'true' : undefined}
-      aria-label={`${title}, ${knownCount} of ${count} questions learned`}
-      onClick={() => onSelect(slug)}
+    <Link
+      href={`/${topic.slug}`}
+      onClick={onNavigate}
+      aria-current={isActive ? 'page' : undefined}
       className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
         isActive
           ? 'glass text-text-primary'
@@ -64,31 +61,34 @@ function TopicItem({
     >
       <span
         className="h-2.5 w-2.5 shrink-0 rounded-full"
-        style={{ backgroundColor: color }}
+        style={{ backgroundColor: topic.color }}
         aria-hidden="true"
       />
-      <span className="flex-1 truncate" aria-hidden="true">
-        {title}
+      <span className="flex-1 truncate">{topic.title}</span>
+      <span className="shrink-0 rounded-md bg-surface-hover px-1.5 py-0.5 text-xs text-text-secondary">
+        {knownCount}/{topic.questionCount}
       </span>
-      <span
-        className="shrink-0 rounded-md bg-surface-hover px-1.5 py-0.5 text-xs text-text-secondary"
-        aria-hidden="true"
-      >
-        {knownCount}/{count}
-      </span>
-    </button>
+    </Link>
   );
 }
 
-export function Sidebar({ activeSlug, onSelect, mobileOpen, mobileDrawerRef }: SidebarProps) {
+export function Sidebar({
+  summaries,
+  mobileOpen,
+  mobileDrawerRef,
+  onNavigate,
+}: SidebarProps) {
+  const pathname = usePathname();
+  const activeSlug = pathname.split('/').filter(Boolean)[0] ?? summaries[0]?.slug ?? '';
+
   return (
     <>
-      <aside
-        className="hidden w-64 shrink-0 lg:block"
-        aria-label="Topics"
-      >
+      <aside className="hidden w-64 shrink-0 lg:block" aria-label="Topics">
         <nav className="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
-          <SidebarContent activeSlug={activeSlug} onSelect={onSelect} />
+          <SidebarContent
+            summaries={summaries}
+            activeSlug={activeSlug}
+          />
         </nav>
       </aside>
 
@@ -104,7 +104,11 @@ export function Sidebar({ activeSlug, onSelect, mobileOpen, mobileDrawerRef }: S
         }`}
       >
         <nav className="h-full overflow-y-auto">
-          <SidebarContent activeSlug={activeSlug} onSelect={onSelect} />
+          <SidebarContent
+            summaries={summaries}
+            activeSlug={activeSlug}
+            onNavigate={onNavigate}
+          />
         </nav>
       </aside>
     </>

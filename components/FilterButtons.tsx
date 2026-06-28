@@ -1,15 +1,11 @@
-import { Level } from '@/types/question';
+'use client';
 
-const LEVELS: { label: string; value: Level | 'all' }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Junior', value: 'junior' },
-  { label: 'Middle', value: 'middle' },
-  { label: 'Senior', value: 'senior' },
-];
+import type { FilterLevel } from '@/types/question';
+import { FILTER_LEVELS } from '@/lib/levelConfig';
 
 interface FilterButtonsProps {
-  active: Level | 'all';
-  onChange: (value: Level | 'all') => void;
+  active: FilterLevel;
+  onChange: (value: FilterLevel) => void;
 }
 
 export function FilterButtons({ active, onChange }: FilterButtonsProps) {
@@ -17,7 +13,7 @@ export function FilterButtons({ active, onChange }: FilterButtonsProps) {
     <fieldset className="m-0 min-w-0 border-0 p-0">
       <legend className="sr-only">Filter by difficulty</legend>
       <div className="flex flex-wrap gap-1.5">
-        {LEVELS.map(({ label, value }) => (
+        {FILTER_LEVELS.map(({ label, value }) => (
           <button
             key={value}
             type="button"
