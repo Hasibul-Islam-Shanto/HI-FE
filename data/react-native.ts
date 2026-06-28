@@ -1,0 +1,136 @@
+import { Topic } from '@/types/question';
+
+export const reactNative: Topic = {
+  slug: 'react-native',
+  title: 'React Native',
+  description: 'Mobile app: components, navigation & platform APIs.',
+  color: '#5b9ee8',
+  questions: [
+    {
+      id: 'react-native-01',
+      question: 'What is React Native and how does it differ from React?',
+      level: 'junior',
+      answer: 'React Native lets you build native mobile apps for iOS and Android using React and JavaScript. Instead of rendering HTML, it maps components to native platform views. React targets the web and renders the DOM; React Native targets mobile and renders native UI. Logic, hooks, and state management patterns are shared between the two.',
+    },
+    {
+      id: 'react-native-02',
+      question: 'When are View, Text and ScrollView used?',
+      level: 'junior',
+      answer: 'View is the fundamental layout container, similar to a div on the web, used for grouping and styling. Text renders text content — all text must be inside a Text component. ScrollView is a scrollable container that renders all its children at once, best suited for small content; for long lists, use FlatList instead.',
+    },
+    {
+      id: 'react-native-03',
+      question: 'How does styling work in React Native?',
+      level: 'junior',
+      answer: "Styles are written as JavaScript objects, typically via a StyleSheet creation helper, or inline. Property names use camelCase, like backgroundColor and fontSize. There's no CSS cascade or class inheritance — all styles are scoped to the component. Flexbox is the default layout system, with column as the default direction, unlike the web's default row.",
+    },
+    {
+      id: 'react-native-04',
+      question: "What's the difference between FlatList and ScrollView?",
+      level: 'middle',
+      answer: 'ScrollView renders all of its children at once — fine for small, fixed content. FlatList renders only the currently visible items through virtualization — essential for long, dynamic lists like contacts or feeds. FlatList requires data and renderItem props, and supports a key extractor, pagination, pull-to-refresh, and an end-reached callback for infinite scroll.',
+    },
+    {
+      id: 'react-native-05',
+      question: "What's the difference between Expo and bare React Native workflow?",
+      level: 'middle',
+      answer: "The Expo managed workflow offers simplified setup, access to the Expo SDK's APIs, over-the-air updates, and cloud builds — ideal for most apps. The bare workflow gives full React Native with native code access, needed when the Expo SDK doesn't cover some native module you require. Expo Go lets you preview an app without building it, and you can eject from managed to bare later if needed.",
+    },
+    {
+      id: 'react-native-06',
+      question: 'How is platform-specific code written?',
+      level: 'middle',
+      answer: 'Two approaches: checking Platform.OS directly to branch a value or render path, or creating separate platform-specific files (one suffixed for iOS, one for Android) which React Native automatically selects from. A Platform.select helper gives a concise way to pick conditional values. Separate files are generally preferred for larger differences.',
+    },
+    {
+      id: 'react-native-07',
+      question: 'React Navigation basics?',
+      level: 'middle',
+      answer: 'React Navigation is the standard routing library for React Native. Key navigator types include Stack (pushing and popping screens), Tab (bottom tabs), and Drawer (a side menu). The app is wrapped in a navigation container, and each screen receives navigation and route props for navigating between screens and reading passed parameters.',
+    },
+    {
+      id: 'react-native-08',
+      question: "What's the difference between TouchableOpacity, Pressable and Button?",
+      level: 'junior',
+      answer: 'Button is the simplest option, platform-styled with limited customization. TouchableOpacity fades its opacity on press and is highly customizable, historically widely used. Pressable is the modern replacement, supporting pressed-state styling, expanded hit areas, ripple effects on Android, and finer control over press events. Pressable is generally preferred for new code.',
+    },
+    {
+      id: 'react-native-09',
+      question: 'Why is SafeAreaView needed?',
+      level: 'junior',
+      answer: "SafeAreaView ensures content doesn't render under device notches, status bars, home indicators, or rounded corners, which matters particularly on iOS. It adds padding automatically based on the device's safe area insets. A dedicated safe-area-context library offers finer control through a related hook.",
+    },
+    {
+      id: 'react-native-10',
+      question: 'When is KeyboardAvoidingView needed?',
+      level: 'middle',
+      answer: 'On iOS, the software keyboard can cover form inputs. KeyboardAvoidingView automatically adjusts its layout when the keyboard appears, using a behavior setting that can pad, shrink, or translate the view. It\'s used to wrap forms containing text inputs. Android handles this differently, through a window soft-input mode setting instead.',
+    },
+    {
+      id: 'react-native-11',
+      question: 'What is AsyncStorage?',
+      level: 'middle',
+      answer: 'AsyncStorage is a simple, string-based, persistent key-value storage system for React Native, similar to localStorage on the web. It\'s asynchronous and Promise-based, typically used through the community-maintained async-storage package. For structured or relational data, consider SQLite or a faster synchronous alternative like MMKV instead.',
+    },
+    {
+      id: 'react-native-12',
+      question: 'How is useEffect used in React Native?',
+      level: 'middle',
+      answer: 'Exactly the same as in React — it runs after render and supports a dependency array and cleanup function. Common uses include subscribing to app state changes, keyboard events, navigation focus and blur events, and fetching data on mount.',
+    },
+    {
+      id: 'react-native-13',
+      question: 'What is the Hermes engine?',
+      level: 'middle',
+      answer: 'Hermes is a lightweight JavaScript engine built by Meta and optimized specifically for React Native. It pre-compiles JavaScript to bytecode at build time, reducing startup time, has a lower memory footprint, and improves time-to-interactive. It\'s enabled by default in new React Native projects, with engines like V8 used as an alternative in some scenarios.',
+    },
+    {
+      id: 'react-native-14',
+      question: 'What are Bridge and New Architecture (Fabric, TurboModules)?',
+      level: 'middle',
+      answer: 'The old Bridge let JS and native code communicate asynchronously through a JSON serialization layer, which became a performance bottleneck. The New Architecture introduces a JavaScript Interface that allows direct, synchronous calls between JS and native code without serialization. Fabric is the new rendering system built on this interface, and TurboModules are lazily loaded native modules that use it too — together eliminating the old bridge bottleneck.',
+    },
+    {
+      id: 'react-native-15',
+      question: 'Image component and optimization?',
+      level: 'middle',
+      answer: 'The built-in Image component accepts a remote URI or a local required asset as its source. Unlike on the web, it has no intrinsic size, so width and height must always be set explicitly. For performance, use an appropriate resize mode, cache images with a dedicated fast-image library, and prefer the WebP format. A modern Expo-provided image component adds blurhash placeholders and improved caching.',
+    },
+    {
+      id: 'react-native-16',
+      question: 'StyleSheet vs inline style — which one?',
+      level: 'junior',
+      answer: 'Using the StyleSheet creation helper is generally preferred: styles are validated at startup rather than at render time, only IDs are sent to native code instead of full objects (reducing bridge traffic), and it improves readability and reusability. Inline styles are fine for truly dynamic values, like a calculated width. Avoid creating new style objects inside render for anything static.',
+    },
+    {
+      id: 'react-native-17',
+      question: 'Native module and JSI integration?',
+      level: 'senior',
+      answer: 'When React Native lacks a native API you need, you write a Native Module in Objective-C or Swift for iOS, or Java or Kotlin for Android. Under the old architecture, communication happened over the bridge. Under the New Architecture, native modules use the JavaScript Interface along with a codegen tool that auto-generates type-safe bindings. TurboModules are the new standard, declared in a typed spec file and loaded lazily.',
+    },
+    {
+      id: 'react-native-18',
+      question: 'Reanimated and UI thread animations?',
+      level: 'senior',
+      answer: 'React Native\'s default Animated API runs on the JS thread, which can drop frames under heavy load. The Reanimated library (version 2 and later) runs animations on the UI thread instead, using small worklet functions compiled to run natively. It supports gesture-driven animations through a companion gesture-handler library, with shared values and animated styles as its core building blocks.',
+    },
+    {
+      id: 'react-native-19',
+      question: 'Flipper, Metro bundler and release optimization?',
+      level: 'senior',
+      answer: 'Metro is React Native\'s JavaScript bundler, handling module resolution, transformation, and hot module replacement. Flipper is a desktop debugger for inspecting network requests, layout, crashes, logs, and state. For release optimization: enable Hermes, enable code shrinking tools on Android, strip unused JavaScript through tree-shaking, split APKs by architecture, and use inline requires or RAM bundles for large apps.',
+    },
+    {
+      id: 'react-native-20',
+      question: 'Deep linking and universal links?',
+      level: 'senior',
+      answer: "Deep links open a specific screen directly from a custom URL scheme. Universal Links on iOS and App Links on Android use ordinary HTTPS URLs that open the app if it's installed, falling back to a website otherwise. These are configured through platform-specific domain association files, and handled inside React Navigation through its linking configuration, or through Expo's linking module in a managed workflow.",
+    },
+    {
+      id: 'react-native-21',
+      question: 'Offline-first and sync strategy?',
+      level: 'senior',
+      answer: 'Offline-first means the app works against local data first, syncing when a connection becomes available. Common patterns include caching API responses locally, queueing mutations made while offline and replaying them once back online (detecting connectivity changes), and resolving conflicts — for example with a last-write-wins rule or CRDTs. Dedicated offline-first database libraries and data-fetching libraries with persistence support are commonly used here.',
+    },
+  ],
+};

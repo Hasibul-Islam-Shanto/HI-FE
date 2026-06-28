@@ -1,0 +1,142 @@
+import { Topic } from '@/types/question';
+
+export const javascript: Topic = {
+  slug: 'javascript',
+  title: 'JavaScript',
+  description: 'Language mechanics: closures, this, event loop, promises.',
+  color: '#f59e0b',
+  questions: [
+    {
+      id: 'javascript-01',
+      question: "What's the difference between var, let and const, and what is hoisting?",
+      level: 'middle',
+      answer: 'var is function-scoped and hoisted (initialized as undefined). let and const are block-scoped and hoisted but not initialized (Temporal Dead Zone). const requires initialization and cannot be reassigned (but its object properties can be mutated). Prefer const, then let, and avoid var.',
+    },
+    {
+      id: 'javascript-02',
+      question: "What's the difference between == and ===?",
+      level: 'junior',
+      answer: "== performs type coercion, so comparing the number 0 to the string '0' returns true. === checks value AND type, so the same comparison returns false. Always use === to avoid unexpected coercion bugs.",
+    },
+    {
+      id: 'javascript-03',
+      question: 'What is a closure and where is it used?',
+      level: 'middle',
+      answer: 'A closure is a function that remembers variables from its outer scope even after the outer function has returned. Used for data encapsulation/privacy, factory functions, memoization, event handlers, and counters — a classic example is a counter function returning an inner function that increments a variable defined in the outer scope.',
+    },
+    {
+      id: 'javascript-04',
+      question: 'What does the `this` keyword depend on?',
+      level: 'middle',
+      answer: 'this is determined at call time, not definition time. In a regular function, this is the calling object (or window/undefined in strict mode). In an arrow function, this is captured from the enclosing lexical scope. You can also bind it explicitly with call, apply, or bind. In class methods, this refers to the class instance.',
+    },
+    {
+      id: 'javascript-05',
+      question: 'What is the event loop, microtask and macrotask?',
+      level: 'middle',
+      answer: 'JS is single-threaded. The event loop processes the call stack, then microtasks (Promises, queueMicrotask, MutationObserver) fully before macrotasks (setTimeout, setInterval, I/O). Microtasks always run before the next macrotask.',
+    },
+    {
+      id: 'javascript-06',
+      question: 'What is the relationship between Promise and async/await?',
+      level: 'middle',
+      answer: 'async/await is syntactic sugar over Promises. An async function always returns a Promise. await pauses execution until the Promise resolves (without blocking the thread). Error handling differs: try/catch with async/await versus a .catch() call in a promise chain.',
+    },
+    {
+      id: 'javascript-07',
+      question: "What's the difference between arrow functions and regular functions?",
+      level: 'middle',
+      answer: "Arrow functions have no own this (it's lexically bound), no arguments object, cannot be used as constructors, and cannot be generators — and they have shorter syntax. Regular functions have their own this, their own arguments object, can be used as constructors, and are hoisted when declared as function declarations.",
+    },
+    {
+      id: 'javascript-08',
+      question: 'What do map, filter and reduce do?',
+      level: 'middle',
+      answer: 'map transforms each element and returns a new array of the same length. filter returns a new array with only the elements that pass a test. reduce accumulates elements into a single value. All three are non-mutating — they return new arrays or values rather than changing the original.',
+    },
+    {
+      id: 'javascript-09',
+      question: "What's the difference between null and undefined?",
+      level: 'junior',
+      answer: "undefined means a variable was declared but not assigned, or a function returned nothing, or a property doesn't exist. null is an explicit absence of value, intentionally assigned. Oddly, typeof null returns 'object' — a long-standing quirk. Use null when you want to explicitly signal \"no value.\"",
+    },
+    {
+      id: 'javascript-10',
+      question: 'What is prototype and prototypal inheritance?',
+      level: 'middle',
+      answer: 'Every JS object has a hidden prototype link to another object (or null). Property lookup walks up this prototype chain. Classes in JS are syntactic sugar over prototypal inheritance. Object.create can be used to create an object with a specified prototype directly.',
+    },
+    {
+      id: 'javascript-11',
+      question: 'What is event bubbling, capturing and delegation?',
+      level: 'middle',
+      answer: "Events propagate in three phases: capture (top to target), target, and bubble (target back to top). Most handlers use bubbling. Event delegation means attaching one handler to a parent to handle events from many children, using the event's target property — efficient for dynamic lists.",
+    },
+    {
+      id: 'javascript-12',
+      question: "What's the difference between shallow copy and deep copy?",
+      level: 'middle',
+      answer: "A shallow copy copies top-level properties only — nested objects remain shared references, as with Object.assign or the spread operator. A deep copy recursively copies all nested objects, using structuredClone, a JSON stringify/parse round-trip, or a library like lodash's cloneDeep. The JSON-based approach fails on functions, undefined values, Dates, and circular references.",
+    },
+    {
+      id: 'javascript-13',
+      question: "What's the difference between debounce and throttle?",
+      level: 'middle',
+      answer: 'Debounce delays execution until a set time has passed since the last call — ideal for search input or the end of a resize. Throttle ensures a function runs at most once per a fixed interval regardless of how many times it\'s called — ideal for scroll or mousemove handlers.',
+    },
+    {
+      id: 'javascript-14',
+      question: "What's the difference between spread and rest operators (...)?",
+      level: 'junior',
+      answer: 'Same syntax, opposite purposes. Spread expands an iterable into individual elements, useful for copying arrays/objects or passing array elements as arguments. Rest collects remaining elements into an array, useful for variadic function parameters or pulling "everything else" out of a destructured object.',
+    },
+    {
+      id: 'javascript-15',
+      question: 'What is destructuring?',
+      level: 'junior',
+      answer: 'Syntax to extract values from arrays or properties from objects into variables directly at the point of assignment. Supports default values, renaming, nested destructuring, and rest collection of remaining items.',
+    },
+    {
+      id: 'javascript-16',
+      question: 'Which values are truthy and which are falsy?',
+      level: 'junior',
+      answer: 'Falsy values are false, 0, -0, the BigInt zero, an empty string, null, undefined, and NaN. Everything else is truthy, including the string "0", an empty array, an empty object, and even an empty function.',
+    },
+    {
+      id: 'javascript-17',
+      question: 'Does setTimeout(fn, 0) run immediately?',
+      level: 'middle',
+      answer: 'No. It schedules the callback as a macrotask, so it runs after the current call stack clears and all pending microtasks resolve. Useful to defer work to the next iteration of the event loop.',
+    },
+    {
+      id: 'javascript-18',
+      question: 'Event loop: microtask vs macrotask ordering?',
+      level: 'senior',
+      answer: 'After each macrotask, the entire microtask queue is drained before the next macrotask runs. This means chained .then() calls all resolve before any setTimeout callback fires. queueMicrotask can add to the microtask queue directly.',
+    },
+    {
+      id: 'javascript-19',
+      question: 'When is WeakMap / WeakSet used?',
+      level: 'senior',
+      answer: "WeakMap and WeakSet hold weak references — their entries don't prevent garbage collection of the key objects. Use WeakMap to attach private metadata to objects (e.g., DOM nodes) without causing memory leaks. Neither is iterable.",
+    },
+    {
+      id: 'javascript-20',
+      question: 'What are Proxy and Reflect for?',
+      level: 'senior',
+      answer: "Proxy wraps an object and intercepts fundamental operations like get, set, has, deleteProperty, and apply via handler traps. Reflect provides the default behaviors for those same operations. Common uses include reactivity systems (like Vue 3's), validation, logging, and mocking.",
+    },
+    {
+      id: 'javascript-21',
+      question: 'Module federation / dynamic import architecture?',
+      level: 'senior',
+      answer: 'A dynamic import() call loads a module lazily at runtime and returns a Promise, enabling code splitting. Module Federation (a Webpack 5 feature) lets separately deployed apps share code such as components or libraries at runtime — the foundation of micro-frontend architectures.',
+    },
+    {
+      id: 'javascript-22',
+      question: 'AbortController and signal pattern?',
+      level: 'senior',
+      answer: "AbortController creates a controller exposing a signal. You pass that signal to fetch() or to event listeners. Calling the controller's abort method cancels in-flight requests and fires an abort event. Essential for cleaning up async operations inside useEffect or on navigation away from a page.",
+    },
+  ],
+};

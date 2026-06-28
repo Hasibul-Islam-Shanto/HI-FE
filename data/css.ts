@@ -1,0 +1,130 @@
+import { Topic } from '@/types/question';
+
+export const css: Topic = {
+  slug: 'css',
+  title: 'CSS',
+  description: 'Layout, box model, responsive & selectors.',
+  color: '#8b5cf6',
+  questions: [
+    {
+      id: 'css-01',
+      question: 'What is the box model?',
+      level: 'junior',
+      answer: 'Every element is a box: content, padding, border, margin, from inside out. By default (box-sizing: content-box) width/height apply to content only. With border-box, padding and border are included inside the width/height.',
+    },
+    {
+      id: 'css-02',
+      question: 'What does box-sizing: border-box do?',
+      level: 'middle',
+      answer: 'Makes width and height include padding and border, not just content. This makes sizing predictable and is standard in most modern CSS resets applying border-box to all elements globally.',
+    },
+    {
+      id: 'css-03',
+      question: 'Explain the position types (static/relative/absolute/fixed/sticky).',
+      level: 'middle',
+      answer: 'static: default, in normal flow. relative: offset from its normal position, still occupies space. absolute: removed from flow, positioned relative to nearest non-static ancestor. fixed: relative to viewport, stays on scroll. sticky: hybrid — in flow until it hits a scroll threshold, then sticks.',
+    },
+    {
+      id: 'css-04',
+      question: 'What are the basics and main properties of Flexbox?',
+      level: 'middle',
+      answer: 'Flexbox is a 1D layout system. Container properties: display flex, flex-direction, justify-content for the main axis, align-items for the cross axis, gap, flex-wrap. Item properties: flex-grow, flex-shrink, flex-basis, align-self, order.',
+    },
+    {
+      id: 'css-05',
+      question: 'When to use Grid vs Flexbox?',
+      level: 'middle',
+      answer: 'Flexbox: 1D layout (row OR column) — nav bars, card rows, aligning items in a line. Grid: 2D layout (rows AND columns) — page layouts, complex grids. They complement each other; use Grid for the macro layout and Flexbox for component-level layout.',
+    },
+    {
+      id: 'css-06',
+      question: 'How is CSS specificity calculated?',
+      level: 'middle',
+      answer: 'Inline styles beat ID selectors, which beat class/attribute/pseudo-class selectors, which beat element/pseudo-element selectors. The !important modifier overrides everything (use sparingly). Higher specificity wins; equal specificity means the last declared rule wins.',
+    },
+    {
+      id: 'css-07',
+      question: "What's the difference between display:none, visibility:hidden and opacity:0?",
+      level: 'junior',
+      answer: 'display:none removes the element from layout, invisible, not accessible. visibility:hidden is invisible but still occupies space, not accessible to screen readers. opacity:0 is invisible but occupies space AND is still accessible/clickable.',
+    },
+    {
+      id: 'css-08',
+      question: "What's the difference between px, em, rem and %?",
+      level: 'middle',
+      answer: "px: absolute pixels. em: relative to the parent's font-size (compounds through nesting). rem: relative to the root html font-size — predictable, preferred for font sizes and spacing. %: relative to the parent's dimension.",
+    },
+    {
+      id: 'css-09',
+      question: "What's the difference between pseudo-class and pseudo-element?",
+      level: 'middle',
+      answer: 'A pseudo-class (:hover, :focus, :nth-child) targets an element in a specific state. A pseudo-element (::before, ::after, ::first-line) targets a virtual sub-part of an element. Pseudo-elements use the double-colon syntax in modern CSS.',
+    },
+    {
+      id: 'css-10',
+      question: 'What is z-index and stacking context?',
+      level: 'middle',
+      answer: 'z-index controls layer order on the Z axis (who appears on top). It only works on positioned (non-static) elements. A stacking context is created by certain properties (position with z-index, opacity less than 1, transform, etc.) — z-index comparisons are relative within the same stacking context.',
+    },
+    {
+      id: 'css-11',
+      question: 'How do CSS custom properties (variables) work?',
+      level: 'middle',
+      answer: 'Declared with a double-dash prefix, e.g. a custom property holding a color value, and referenced with the var() function elsewhere in the stylesheet. Scoped to the element and its descendants; global scope is typically declared on the root element. Can be updated via JavaScript and respond to media queries.',
+    },
+    {
+      id: 'css-12',
+      question: "What's the difference between transition and animation?",
+      level: 'junior',
+      answer: 'transition: triggered by a state change (hover, focus, class toggle) — interpolates between two states. animation: runs autonomously with keyframes, can loop, has timing control and multiple steps. Use transitions for simple interactive feedback, animations for complex or auto-playing motion.',
+    },
+    {
+      id: 'css-13',
+      question: 'What is margin collapsing?',
+      level: 'middle',
+      answer: 'Adjacent vertical margins of block elements merge into one (the larger one). Happens between sibling blocks, and between a parent and its first/last child if no border/padding separates them. Does NOT happen with flex/grid children or horizontal margins.',
+    },
+    {
+      id: 'css-14',
+      question: 'How do you center an element horizontally and vertically?',
+      level: 'junior',
+      answer: 'With Flexbox: set the parent to display flex with justify-content and align-items both centered. With Grid: set the parent to display grid with place-items centered. With absolute positioning: position the element absolutely at 50%/50% and offset it back by half its own size with a transform. Margin auto also works for horizontal centering of block elements with a fixed width.',
+    },
+    {
+      id: 'css-15',
+      question: 'What is the mobile-first approach and what is a media query?',
+      level: 'junior',
+      answer: 'Mobile-first: write base styles for small screens, then use min-width media queries to add styles for larger screens. This is the opposite of desktop-first. Media queries apply rules conditionally based on viewport size, orientation, resolution, etc.',
+    },
+    {
+      id: 'css-16',
+      question: 'What is CSS @layer and cascade layers for?',
+      level: 'senior',
+      answer: '@layer lets you explicitly define the cascade order of style groups, preventing specificity wars between, e.g., base styles, component styles, utilities, and third-party CSS. Lower layers are overridden by higher layers regardless of specificity.',
+    },
+    {
+      id: 'css-17',
+      question: 'What does @container (container queries) provide?',
+      level: 'senior',
+      answer: "Container queries allow styling an element based on its parent container's size (not the viewport). This enables truly component-level responsive design, where a card component can change layout based on the width of whatever container it's placed in.",
+    },
+    {
+      id: 'css-18',
+      question: 'What can the :has() selector do?',
+      level: 'senior',
+      answer: ':has() is a "parent selector" — it selects an element based on its children, for example styling a form differently if it contains an invalid input. This was previously impossible in pure CSS.',
+    },
+    {
+      id: 'css-19',
+      question: 'When are CSS containment and content-visibility needed?',
+      level: 'senior',
+      answer: 'The contain property restricts what changes inside an element can affect outside it, improving browser rendering performance. content-visibility: auto tells the browser to skip rendering off-screen elements entirely until they are near the viewport — a significant performance gain for long pages.',
+    },
+    {
+      id: 'css-20',
+      question: 'What is subgrid and how does it differ from Grid?',
+      level: 'senior',
+      answer: "Subgrid allows a grid child to participate in and align to its parent grid's tracks instead of creating its own independent grid. Solves alignment across nested components (e.g., card grids with varying content heights).",
+    },
+  ],
+};

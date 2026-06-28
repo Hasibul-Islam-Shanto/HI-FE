@@ -1,0 +1,136 @@
+import { Topic } from '@/types/question';
+
+export const react: Topic = {
+  slug: 'react',
+  title: 'React',
+  description: 'Hooks, rendering & component patterns.',
+  color: '#7570f4',
+  questions: [
+    {
+      id: 'react-01',
+      question: 'What is Virtual DOM and how does it work?',
+      level: 'middle',
+      answer: 'Virtual DOM is a lightweight in-memory representation of the real DOM. When state changes, React creates a new Virtual DOM tree, diffs it with the previous one (reconciliation), and applies only the minimal set of real DOM updates. This batches and optimizes DOM mutations for performance.',
+    },
+    {
+      id: 'react-02',
+      question: 'How does useState work?',
+      level: 'junior',
+      answer: 'useState takes an initial value and returns a pair: the current value and a setter function. Calling the setter schedules a re-render with the new value. State updates are asynchronous and batched. For updates based on previous state, use the functional form of the setter that receives the previous value.',
+    },
+    {
+      id: 'react-03',
+      question: 'What are useEffect, the dependency array and cleanup?',
+      level: 'middle',
+      answer: 'useEffect runs its effect function after render. The dependency array controls when it re-runs: an empty array means only on mount; a list of values means it reruns when any of those change; omitting the array entirely means it runs after every render. Returning a cleanup function from the effect lets you cancel subscriptions, timers, or abort fetches. It runs after paint, asynchronously.',
+    },
+    {
+      id: 'react-04',
+      question: "What's the difference between props and state?",
+      level: 'junior',
+      answer: 'Props are read-only inputs passed from parent to child — a component cannot change its own props. State is mutable internal data managed by the component itself — changing it triggers a re-render. Use props for configuration, state for dynamic/interactive data.',
+    },
+    {
+      id: 'react-05',
+      question: 'Why is the key prop needed?',
+      level: 'middle',
+      answer: 'key helps React identify which items in a list have changed, been added, or removed during reconciliation. Without stable keys, React may reuse the wrong DOM nodes, causing bugs with input focus, animations, or component state. Use unique, stable IDs — not array indices.',
+    },
+    {
+      id: 'react-06',
+      question: "What's the difference between controlled and uncontrolled components?",
+      level: 'middle',
+      answer: 'In a controlled component, the form element\'s value is driven by React state via a value prop and onChange handler — React is the source of truth. In an uncontrolled component, the DOM manages its own state, and you read it via a ref when needed. Controlled gives predictable behavior and easy validation; uncontrolled is simpler for basic cases.',
+    },
+    {
+      id: 'react-07',
+      question: "What's the difference between useMemo and useCallback?",
+      level: 'middle',
+      answer: 'useMemo memoizes the return value of a computation — use it for expensive calculations. useCallback memoizes the function reference itself — use it to prevent child re-renders when passing callbacks as props, typically paired with React.memo. Both only recompute when their dependencies change.',
+    },
+    {
+      id: 'react-08',
+      question: 'What is useRef used for?',
+      level: 'middle',
+      answer: 'useRef returns a mutable object with a current property that persists across renders without causing re-renders. Two main uses: accessing DOM elements directly by attaching the ref to an element, and storing mutable values like timers, previous values, or abort controllers without triggering re-renders.',
+    },
+    {
+      id: 'react-09',
+      question: 'When is Context API needed?',
+      level: 'middle',
+      answer: "Context avoids \"prop drilling\" — passing props through many intermediate components that don't actually need them. You create a context, provide a value higher up the tree, and consume it anywhere below with a hook. It's not a global state replacement — overusing it causes performance issues, since every consumer re-renders when the context value changes.",
+    },
+    {
+      id: 'react-10',
+      question: 'What are the rules of Hooks?',
+      level: 'junior',
+      answer: "Only call Hooks at the top level — never inside loops, conditions, or nested functions. Only call Hooks from React function components or from custom Hooks — never from regular JS functions. These rules ensure Hook call order stays consistent across renders, since React relies on that order for state tracking.",
+    },
+    {
+      id: 'react-11',
+      question: 'What causes a component to re-render?',
+      level: 'middle',
+      answer: 'Its own state changes; its parent re-renders due to new props or parent state changes; a context it consumes changes; or a hook it uses (like useReducer) changes. React.memo, useMemo, and useCallback can help prevent unnecessary re-renders in these cases.',
+    },
+    {
+      id: 'react-12',
+      question: 'What is lifting state up?',
+      level: 'junior',
+      answer: 'When multiple sibling components need to share state, you move that state to their closest common ancestor and pass it down via props. The parent becomes the single source of truth. This is the fundamental React data-flow pattern before reaching for Context or an external state manager.',
+    },
+    {
+      id: 'react-13',
+      question: 'What does React.memo do?',
+      level: 'middle',
+      answer: "React.memo wraps a component to memoize its render output. It shallowly compares props — if props haven't changed, the component skips re-rendering. Use it for pure components that render often with unchanged props. You can provide a custom comparison function as a second argument for deeper comparisons.",
+    },
+    {
+      id: 'react-14',
+      question: 'What is a custom hook and when do you write one?',
+      level: 'middle',
+      answer: 'A custom hook is a function whose name starts with "use" and that calls other hooks internally. It extracts reusable stateful logic out of components — common examples include hooks for fetching data, tracking window size, or debouncing a value. Keeps components clean and makes logic testable and shareable.',
+    },
+    {
+      id: 'react-15',
+      question: 'What is reconciliation?',
+      level: 'middle',
+      answer: "Reconciliation is React's algorithm for diffing the old and new Virtual DOM trees to determine the minimum set of real DOM changes needed. React uses keys for lists and compares element types for efficient diffing. The Fiber architecture makes this process incremental and interruptible.",
+    },
+    {
+      id: 'react-16',
+      question: 'What is Fragment for?',
+      level: 'junior',
+      answer: 'Fragments let you return multiple elements from a component without adding an extra DOM node, using either the short empty-tag syntax or the explicit Fragment component. Useful when a wrapping div would break layouts, such as table rows or flex children. The explicit form supports a key prop, useful inside lists.',
+    },
+    {
+      id: 'react-17',
+      question: 'When is Concurrent React and useTransition needed?',
+      level: 'senior',
+      answer: 'Concurrent React allows React to interrupt, pause, and resume renders. useTransition marks a state update as non-urgent, so React can deprioritize it while keeping urgent updates like typing or clicking responsive. Use it for expensive UI updates like filtering large lists. useDeferredValue is the value-level equivalent of the same idea.',
+    },
+    {
+      id: 'react-18',
+      question: 'What is useSyncExternalStore for?',
+      level: 'senior',
+      answer: 'useSyncExternalStore is the recommended way to subscribe React components to external stores — like Redux, Zustand, or browser APIs — safely under Concurrent Mode. It avoids "tearing," where different components would otherwise see different snapshots of the same external state during a single concurrent render.',
+    },
+    {
+      id: 'react-19',
+      question: 'What is React Compiler / automatic memoization?',
+      level: 'senior',
+      answer: 'React Compiler (formerly known as React Forget) automatically inserts memoization optimizations at build time, eliminating much of the need to manually wrap things in useMemo or useCallback. It analyzes component code and generates optimized output, making performant React code much easier to write by default.',
+    },
+    {
+      id: 'react-20',
+      question: 'Error Boundary and Suspense boundaries?',
+      level: 'senior',
+      answer: 'An Error Boundary is a component that catches JavaScript errors in its subtree during rendering and shows a fallback UI instead of crashing the whole app. Suspense declaratively shows a fallback, like a loading state, while children are waiting on async data. The two can be combined: errors thrown inside a Suspense boundary fall through to the nearest Error Boundary above it.',
+    },
+    {
+      id: 'react-21',
+      question: 'Fiber architecture in brief?',
+      level: 'senior',
+      answer: 'Fiber is React\'s internal reconciler, introduced in React 16, representing every React element as a "fiber" node — a unit of work. It makes rendering incremental, so work can pause and resume, enables priority-based scheduling for Concurrent Mode, and underlies features like Suspense and transitions. It replaced the older synchronous, recursive stack-based reconciler.',
+    },
+  ],
+};
