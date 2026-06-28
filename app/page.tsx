@@ -1,15 +1,22 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { topics } from "@/data";
 import { ListView } from "@/components/ListView";
 import { Navbar } from "@/components/Navbar";
 import { Sidebar } from "@/components/Sidebar";
 import { Footer } from "@/components/Footer";
 
+const FOCUSABLE_SELECTOR =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export default function Home() {
   const [activeTopicSlug, setActiveTopicSlug] = useState(topics[0].slug);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileDrawerRef = useRef<HTMLElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const activeTopic =
     topics.find((t) => t.slug === activeTopicSlug) ?? topics[0];
@@ -19,24 +26,69 @@ export default function Home() {
     setSidebarOpen(false);
   }, []);
 
+  const closeSidebar = useCallback(() => {
+    setSidebarOpen(false);
+    menuButtonRef.current?.focus();
+  }, []);
+
   useEffect(() => {
     if (!sidebarOpen) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSidebarOpen(false);
+
+    previousFocusRef.current = document.activeElement as HTMLElement;
+
+    const drawer = mobileDrawerRef.current;
+    const focusable = drawer
+      ? Array.from(drawer.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+      : [];
+    focusable[0]?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeSidebar();
+        return;
+      }
+
+      if (e.key !== "Tab" || focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
-    document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [sidebarOpen]);
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      if (previousFocusRef.current?.isConnected) {
+        previousFocusRef.current.focus();
+      }
+    };
+  }, [sidebarOpen, closeSidebar]);
 
   return (
     <>
-      <Navbar onMenuToggle={() => setSidebarOpen((o) => !o)} />
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
+      <Navbar
+        menuButtonRef={menuButtonRef}
+        menuExpanded={sidebarOpen}
+        onMenuToggle={() => setSidebarOpen((open) => !open)}
+      />
 
       {sidebarOpen && (
-        <div
+        <button
+          type="button"
+          aria-label="Close navigation menu"
           className="fixed inset-0 z-30 bg-black/50 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden="true"
+          onClick={closeSidebar}
         />
       )}
 
@@ -46,12 +98,16 @@ export default function Home() {
             activeSlug={activeTopicSlug}
             onSelect={handleTopicSelect}
             mobileOpen={sidebarOpen}
+            mobileDrawerRef={mobileDrawerRef}
           />
 
-          <main className="animate-fade-in min-h-screen flex-1 px-4 pb-6 sm:px-6 lg:pl-8 lg:pr-8">
-            <div role="tabpanel" aria-label={`${activeTopic.title} questions`}>
+          <main
+            id="main-content"
+            className="animate-fade-in min-h-screen flex-1 px-4 pb-6 sm:px-6 lg:pl-8 lg:pr-8"
+          >
+            <section aria-labelledby={`topic-${activeTopic.slug}-heading`}>
               <ListView key={activeTopic.slug} topic={activeTopic} />
-            </div>
+            </section>
             <Footer />
           </main>
         </div>

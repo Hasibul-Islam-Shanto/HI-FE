@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
-  title: "hi Frontend",
+  title: "Frontend",
   description:
     "176 curated frontend interview questions across HTML, CSS, JavaScript, TypeScript, React, React Native, Vue, Next.js, and Coding — with progress tracking.",
 };
@@ -26,7 +21,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} dark antialiased`}
+      className={`${spaceGrotesk.variable} dark antialiased`}
     >
       <body className="min-h-screen">{children}</body>
     </html>

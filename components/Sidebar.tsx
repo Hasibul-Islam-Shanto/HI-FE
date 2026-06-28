@@ -1,5 +1,6 @@
 'use client';
 
+import type { RefObject } from 'react';
 import { topics } from '@/data';
 import { useProgressStore } from '@/store/useProgressStore';
 
@@ -7,26 +8,28 @@ interface SidebarProps {
   activeSlug: string;
   onSelect: (slug: string) => void;
   mobileOpen: boolean;
+  mobileDrawerRef?: RefObject<HTMLElement | null>;
 }
 
-function SidebarContent({ activeSlug, onSelect }: Omit<SidebarProps, 'mobileOpen'>) {
+function SidebarContent({ activeSlug, onSelect }: Omit<SidebarProps, 'mobileOpen' | 'mobileDrawerRef'>) {
   return (
-    <nav aria-label="Topics" className="space-y-1 p-3">
+    <ul className="space-y-1 p-3">
       {topics.map((topic) => {
         const isActive = topic.slug === activeSlug;
         return (
-          <TopicItem
-            key={topic.slug}
-            slug={topic.slug}
-            title={topic.title}
-            color={topic.color}
-            count={topic.questions.length}
-            isActive={isActive}
-            onSelect={onSelect}
-          />
+          <li key={topic.slug}>
+            <TopicItem
+              slug={topic.slug}
+              title={topic.title}
+              color={topic.color}
+              count={topic.questions.length}
+              isActive={isActive}
+              onSelect={onSelect}
+            />
+          </li>
         );
       })}
-    </nav>
+    </ul>
   );
 }
 
@@ -49,8 +52,9 @@ function TopicItem({
 
   return (
     <button
-      role="tab"
-      aria-selected={isActive}
+      type="button"
+      aria-current={isActive ? 'true' : undefined}
+      aria-label={`${title}, ${knownCount} of ${count} questions learned`}
       onClick={() => onSelect(slug)}
       className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
         isActive
@@ -63,34 +67,45 @@ function TopicItem({
         style={{ backgroundColor: color }}
         aria-hidden="true"
       />
-      <span className="flex-1 truncate">{title}</span>
-      <span className="shrink-0 rounded-md bg-surface-hover px-1.5 py-0.5 text-xs text-text-secondary">
+      <span className="flex-1 truncate" aria-hidden="true">
+        {title}
+      </span>
+      <span
+        className="shrink-0 rounded-md bg-surface-hover px-1.5 py-0.5 text-xs text-text-secondary"
+        aria-hidden="true"
+      >
         {knownCount}/{count}
       </span>
     </button>
   );
 }
 
-export function Sidebar({ activeSlug, onSelect, mobileOpen }: SidebarProps) {
+export function Sidebar({ activeSlug, onSelect, mobileOpen, mobileDrawerRef }: SidebarProps) {
   return (
     <>
-      <aside className="hidden w-64 shrink-0 lg:block" role="tablist" aria-label="Topic navigation">
-        <div className="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
+      <aside
+        className="hidden w-64 shrink-0 lg:block"
+        aria-label="Topics"
+      >
+        <nav className="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
           <SidebarContent activeSlug={activeSlug} onSelect={onSelect} />
-        </div>
+        </nav>
       </aside>
 
       <aside
+        ref={mobileDrawerRef}
+        id="mobile-topic-nav"
+        inert={!mobileOpen}
+        role={mobileOpen ? 'dialog' : undefined}
+        aria-modal={mobileOpen ? true : undefined}
+        aria-label="Topics"
         className={`sidebar-drawer fixed left-0 top-20 z-40 h-[calc(100vh-5rem)] w-72 border-r border-border bg-background-elevated lg:hidden ${
           mobileOpen ? 'sidebar-drawer-open' : ''
         }`}
-        role="tablist"
-        aria-label="Topic navigation"
-        aria-hidden={!mobileOpen}
       >
-        <div className="h-full overflow-y-auto">
+        <nav className="h-full overflow-y-auto">
           <SidebarContent activeSlug={activeSlug} onSelect={onSelect} />
-        </div>
+        </nav>
       </aside>
     </>
   );

@@ -14,7 +14,10 @@ export function AnswerContent({ answer, isCodingTopic }: AnswerContentProps) {
       return (
         <div className="space-y-3">
           <p className="text-sm leading-relaxed text-text-secondary">{explanation}</p>
-          <pre className="overflow-x-auto rounded-lg bg-code-bg border border-border p-4 text-sm leading-relaxed">
+          <pre
+            aria-label="Code example"
+            className="overflow-x-auto rounded-lg bg-code-bg border border-border p-4 text-sm leading-relaxed"
+          >
             <code className="font-mono text-text-primary">{code}</code>
           </pre>
         </div>
